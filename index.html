@@ -35,6 +35,7 @@ nav button.on{color:var(--gold)}
 #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1a00;padding:10px 16px;border-radius:14px;font-weight:bold;display:none;z-index:9;max-width:90%;text-align:center}
 input{width:100%;margin-bottom:8px;padding:11px;border-radius:12px;border:1px solid #2c4390;background:#0b1535;color:#fff;font:14px Tahoma;user-select:text;-webkit-user-select:text}
 nav button{font-size:10px}nav button span{font-size:20px}
+#um{position:fixed;inset:0;background:#000c;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}#um>div{background:var(--card);border:2px solid var(--gold);border-radius:18px;padding:18px;max-width:420px;line-height:1.9;font-size:14px}
 </style></head><body>
 <div id="app">
 <header>
@@ -46,23 +47,31 @@ nav button{font-size:10px}nav button span{font-size:20px}
 <div id="toast"></div>
 <script>
 const W=[['کارگر ساده',100,1],['فروشنده',500,5],['کارمند',2000,20],['مدیر',10000,100],['مدیر ارشد',50000,500]];
-const P=[['خانه کوچک',5000,10,1],['آپارتمان',25000,50,3],['مغازه',50000,100,5],['برج تجاری',250000,500,8],['هتل',1e6,2500,12],['مرکز خرید',5e6,10000,18],['آسمان‌خراش',25e6,50000,25]];
-const C=[['سوپرمارکت',2e4,30,1],['رستوران',1e5,150,5],['شرکت حمل‌ونقل',5e5,700,8],['شرکت ساختمانی',2e6,3000,12],['کارخانه',1e7,15000,18],['شرکت فناوری',5e7,80000,25],['بانک',25e7,400000,35]];
+const P=[['خانه کوچک',5000,10,1],['آپارتمان',25000,50,3],['مغازه',50000,100,5],['برج تجاری',250000,500,8],['هتل',1e6,2500,12],['مرکز خرید',5e6,10000,18],['آسمان‌خراش',25e6,50000,25],['دوچرخه',800,2,1],['موتور',6000,15,2],['ماشین اقتصادی',40000,100,4],['ماشین شاسی‌بلند',150000,400,6],['ماشین لوکس',600000,1600,9],['هواپیما شخصی',4e6,12000,15],['هواپیما باری',2e7,70000,22]];const HN=7;
+const C=[['سوپرمارکت',2e4,30,1],['رستوران',1e5,150,5],['شرکت حمل‌ونقل',5e5,700,8],['شرکت ساختمانی',2e6,3000,12],['کارخانه',1e7,15000,18],['شرکت فناوری',5e7,80000,25],['بانک',25e7,400000,35],['کارخانه لبنیات',3e6,4500,14],['کارخانه موتور',8e6,12000,16],['کارخانه ماشین',4e7,65000,22]];
 const B=[[50,2],[500,3],[5000,5],[50000,10],[500000,20]];
-const CL=['معمولی','پیشرفته','حرفه‌ای'],CM=[1,2,4];
+const CL=['معمولی','پیشرفته','حرفه‌ای','فوق‌العاده'],CM=[1,2,4,8];
 const T=[[1,'تازه‌کار'],[5,'فروشنده'],[10,'کارآفرین'],[20,'سرمایه‌گذار'],[30,'تاجر بزرگ'],[40,'میلیاردر'],[50,'سلطان بازار']];
 const SN=['سهام فناوری','سهام صنعت','سهام غذا'],IV=[[10000,60,.1],[100000,300,.25],[1e6,900,.5]];
 const MS=[['۱۰۰ بار روی سکه کلیک کن','k',100,500],['یک کارگر استخدام کن','h',1,300],['یک ملک بخر','p',1,2000],['۱۰ هزار Coin درآمد کسب کن','e',1e4,5000]];
+const EV=[['📰 جهش قیمت طلا در بازار جهانی','g',.008],['📰 افت ناگهانی قیمت طلا','g',-.008],['📰 تحریم‌ها؛ نفت گران شد','o',.01],['📰 افت تقاضا؛ قیمت نفت ریخت','o',-.01],['📰 رشد بورس؛ سهام بالا رفت','s',.012],['📰 سقوط بورس؛ سهام ریخت','s',-.014]];
+const MD=['🥉','🥈','🥇','💎','👑','🔱'],md=n=>n>0?MD[Math.min(Math.floor((n-1)/5),5)].repeat((n-1)%5+1):'',VER=2;
 const day=()=>new Date().toDateString();
-const def=()=>({c:0,w:[0,0,0,0,0],wl:[0,0,0,0,0],p:P.map(_=>0),cm:C.map(_=>0),b:0,cp:0,xp:0,lv:1,g:0,gp:3000,gl:3000,st:[0,0,0],sp:[100,500,2000],inv:[],ms:{d:day(),k:0,h:0,p:0,e:0,done:[]},t:Date.now()});
-let S=def(),tab='home',sub='gold',off=0;
-try{const r=localStorage.getItem('bazaarshah');if(r)S=Object.assign(def(),JSON.parse(r))}catch(e){}
+const def=()=>({c:0,w:[0,0,0,0,0],wl:[0,0,0,0,0],p:P.map(_=>0),cm:C.map(_=>0),b:0,cp:0,xp:0,lv:1,g:0,gp:3000,gl:3000,st:[0,0,0],sp:[100,500,2000],inv:[],ms:{d:day(),k:0,h:0,p:0,e:0,done:[]},t:Date.now(),o:0,op:2000,ol:2000,gh:[3000],oh:[2000],ev:null,pr:0,mv:0});
+const ld=o=>{const s=Object.assign(def(),o);while(s.p.length<P.length)s.p.push(0);while(s.cm.length<C.length)s.cm.push(0);return s};
+function chk(){if(S.mv>=VER)return;S.mv=VER;S.c+=5000;const d=document.createElement('div');d.id='um';d.innerHTML='<div><b style="color:var(--gold);font-size:17px">🎉 بروزرسانی جدید بازارشاه منتشر شد!</b><br>• 👑 پرستیژ: بعد از سطح ۵۰ از نو شروع کن، ۵۰٪ درآمد دائمی بگیر و مدال کنار اسمت در لیدربورد بدرخشه<br>• 🛢 بازار نفت، نمودار قیمت طلا و نفت و اخبار بازار<br>• 🏭 سه کارخانه جدید و سطح «فوق‌العاده» برای همه شرکت‌ها<br>• 🚗 املاک حالا مسکن و وسیله نقلیه دارد: از دوچرخه تا هواپیما باری<br><b style="color:var(--gold)">🎁 هدیه: ۵۰۰۰ سکه به حسابت اضافه شد!</b><button class="b" style="margin-top:12px;width:100%" onclick="this.parentNode.parentNode.remove()">عالیه! 🎁</button></div>';document.body.appendChild(d);save();upd();setTimeout(()=>push(),500)}
+let S=def(),tab='home',sub='gold',psub='h',off=0;
+try{const r=localStorage.getItem('bazaarshah');if(r)S=ld(JSON.parse(r))}catch(e){}
 const f=n=>Math.floor(n).toLocaleString('fa-IR');
 const $=id=>document.getElementById(id);
 const mult=()=>S.b?B[S.b-1][1]:1;
-const click=()=>(1+S.cp)*mult();
-const inc=()=>{let s=0;W.forEach((w,i)=>s+=S.w[i]*w[2]*(1+S.wl[i]));P.forEach((p,i)=>s+=S.p[i]*p[2]);C.forEach((c,i)=>{if(S.cm[i])s+=c[2]*CM[S.cm[i]-1]});return s};
-const assets=()=>{let s=S.c+S.g*S.gp;W.forEach((w,i)=>s+=S.w[i]*w[1]);P.forEach((p,i)=>s+=S.p[i]*p[1]);C.forEach((c,i)=>{if(S.cm[i])s+=c[1]});S.st.forEach((n,i)=>s+=n*S.sp[i]);S.inv.forEach(v=>s+=v.a);return s};
+const pm=()=>1+S.pr*.5,uc=i=>C[i][1]*[0,2,5,12][S.cm[i]];
+const PS=()=>'<div class="sub">'+[['h','🏠 مسکن'],['v','🚗 وسیله نقلیه']].map(x=>`<button class="b ${psub==x[0]?'':'r'}" onpointerdown="act('psub','${x[0]}')">${x[1]}</button>`).join('')+'</div>';
+const EB=()=>S.ev&&Date.now()<S.ev.end?card(S.ev.t,'خبر فوری بازار',''):'';
+const ch=a=>{const w=300,h=90,mn=Math.min(...a),r=(Math.max(...a)-mn)||1,pts=a.map((v,i)=>(i/Math.max(a.length-1,1)*w).toFixed(1)+','+(h-8-(v-mn)/r*(h-16)).toFixed(1)).join(' ');return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:90px;background:#0b1535;border-radius:10px;margin-bottom:8px"><polyline points="${pts}" fill="none" stroke="${a[a.length-1]>=a[0]?'#4cd964':'#ff5a5a'}" stroke-width="2" stroke-linejoin="round"/></svg>`};
+const click=()=>(1+S.cp)*mult()*pm();
+const inc=()=>{let s=0;W.forEach((w,i)=>s+=S.w[i]*w[2]*(1+S.wl[i]));P.forEach((p,i)=>s+=S.p[i]*p[2]);C.forEach((c,i)=>{if(S.cm[i])s+=c[2]*CM[S.cm[i]-1]});return s*pm()};
+const assets=()=>{let s=S.c+S.g*S.gp+S.o*S.op;W.forEach((w,i)=>s+=S.w[i]*w[1]);P.forEach((p,i)=>s+=S.p[i]*p[1]);C.forEach((c,i)=>{if(S.cm[i])s+=c[1]});S.st.forEach((n,i)=>s+=n*S.sp[i]);S.inv.forEach(v=>s+=v.a);return s};
 const need=()=>S.lv*100;
 const title=()=>{let t=T[0][1];T.forEach(x=>{if(S.lv>=x[0])t=x[1]});return t};
 function xp(n){S.xp+=n;while(S.xp>=need()&&S.lv<50){S.xp-=need();S.lv++;toast('🎉 سطح '+f(S.lv)+' — '+title())}}
@@ -77,7 +86,7 @@ function act(a,i,j){
  else if(a=='buyp'){if(S.lv>=P[i][3]&&spend(P[i][1])){S.p[i]++;S.ms.p++;xp(20)}}
  else if(a=='sellp'){if(S.p[i]){S.p[i]--;S.c+=P[i][1]*.7}}
  else if(a=='buyc'){if(S.lv>=C[i][3]&&spend(C[i][1])){S.cm[i]=1;xp(40)}}
- else if(a=='upc'){if(spend(C[i][1]*(S.cm[i]==1?2:5))){S.cm[i]++;xp(40)}}
+ else if(a=='upc'){if(spend(uc(i))){S.cm[i]++;xp(40)}}
  else if(a=='boost'){if(spend(B[i][0])){S.b=i+1;xp(30)}}
  else if(a=='cp'){if(S.cp<99&&spend(cpc())){S.cp++;xp(5)}}
  else if(a=='bg'){if(spend(S.gp)){S.g++}}
@@ -88,6 +97,10 @@ function act(a,i,j){
  else if(a=='col'){const v=S.inv[i];if(v&&Date.now()>=v.end){earn(v.a*(1+v.r));S.inv.splice(i,1);xp(25)}}
  else if(a=='ms'){const m=MS[i];if(S.ms[m[1]]>=m[2]&&!S.ms.done.includes(i)){S.ms.done.push(i);S.c+=m[3];xp(50)}}
  else if(a=='sub'){sub=i}
+ else if(a=='psub'){psub=i}
+ else if(a=='bo'){if(spend(S.op))S.o++}
+ else if(a=='so'){if(S.o){S.o--;S.c+=S.op}}
+ else if(a=='pres'){if(S.lv>=50&&confirm('همه‌چیز ریست می‌شود ولی ۵۰٪ درآمد دائمی می‌گیری. ادامه؟')){S=ld({pr:S.pr+1,mv:S.mv,gh:S.gh,oh:S.oh});toast('👑 پرستیژ '+f(S.pr)+' — '+md(S.pr));push()}}
  render();upd()}
 const cpc=()=>Math.floor(200*Math.pow(1.12,S.cp));
 const bt=(a,i,t,dis,cls)=>`<button class="b ${cls||''}" ${dis?'disabled':''} onpointerdown="act('${a}',${i})">${t}</button>`;
@@ -95,29 +108,34 @@ const card=(n,s,b)=>`<div class="card"><div><b>${n}</b><div class="mut">${s}</di
 function view(){
  if(tab=='rank')return rankView();
  if(tab=='workers')return '<h3>👷 کارگران</h3>'+card('درآمد خودکار کل',f(inc())+' در ثانیه','')+W.map((w,i)=>{const u=w[1]*(S.wl[i]+1)*3,ps=w[2]*(1+S.wl[i]);return card(w[0]+' ×'+f(S.w[i]),f(ps)+' سکه/ثانیه برای هر نفر — کل: '+f(ps*S.w[i]),bt('hire',i,'استخدام '+f(w[1]),S.c<w[1])+bt('wup',i,'ارتقا '+f(u),S.c<u)+bt('fire',i,'اخراج',!S.w[i],'r'))}).join('');
- if(tab=='props')return '<h3>🏢 املاک</h3>'+P.map((p,i)=>{const lk=S.lv<p[3];return card(p[0]+' ×'+f(S.p[i]),lk?'🔒 نیاز به سطح '+f(p[3]):f(p[2])+' سکه/ثانیه',lk?'':bt('buyp',i,'خرید '+f(p[1]),S.c<p[1])+bt('sellp',i,'فروش',!S.p[i],'r'))}).join('');
- if(tab=='comps')return '<h3>🏭 شرکت‌ها</h3>'+C.map((c,i)=>{const l=S.cm[i],lk=S.lv<c[3];let b='';if(!l&&!lk)b=bt('buyc',i,'تأسیس '+f(c[1]),S.c<c[1]);else if(l&&l<3){const u=c[1]*(l==1?2:5);b=bt('upc',i,'ارتقا '+f(u),S.c<u)}
+ if(tab=='props')return '<h3>🏢 املاک</h3>'+PS()+P.map((p,i)=>{if((i<HN)!=(psub=='h'))return '';const lk=S.lv<p[3];return card(p[0]+' ×'+f(S.p[i]),lk?'🔒 نیاز به سطح '+f(p[3]):f(p[2])+' سکه/ثانیه',lk?'':bt('buyp',i,'خرید '+f(p[1]),S.c<p[1])+bt('sellp',i,'فروش',!S.p[i],'r'))}).join('');
+ if(tab=='comps')return '<h3>🏭 شرکت‌ها</h3>'+C.map((c,i)=>{const l=S.cm[i],lk=S.lv<c[3];let b='';if(!l&&!lk)b=bt('buyc',i,'تأسیس '+f(c[1]),S.c<c[1]);else if(l&&l<4){const u=uc(i);b=bt('upc',i,'ارتقا '+f(u),S.c<u)}
  return card(c[0],lk?'🔒 نیاز به سطح '+f(c[3]):l?'سطح '+f(l)+' ('+CL[l-1]+') — '+f(c[2]*CM[l-1])+'/ثانیه':f(c[2])+' سکه/ثانیه',b)}).join('');
- if(tab=='market'){let h='<h3>🛒 بازار</h3><div class="sub">'+[['gold','🥇 طلا'],['stock','📈 سهام'],['inv','💰 سرمایه‌گذاری'],['ms','🎯 مأموریت']].map(x=>`<button class="b ${sub==x[0]?'':'r'}" onpointerdown="act('sub','${x[0]}')" style="padding:8px 2px;font-size:11px">${x[1]}</button>`).join('')+'</div>';
- if(sub=='gold')h+=card('طلا — موجودی: '+f(S.g),'قیمت: '+f(S.gp)+(S.gp>=S.gl?' 🟢▲':' 🔴▼'),bt('bg',0,'خرید',S.c<S.gp)+bt('sg',0,'فروش',!S.g,'r'));
+ if(tab=='market'){let h=EB()+'<h3>🛒 بازار</h3><div class="sub">'+[['gold','🥇 طلا'],['oil','🛢 نفت'],['stock','📈 سهام'],['inv','💰 سرمایه‌گذاری'],['ms','🎯 مأموریت']].map(x=>`<button class="b ${sub==x[0]?'':'r'}" onpointerdown="act('sub','${x[0]}')" style="padding:8px 1px;font-size:10px">${x[1]}</button>`).join('')+'</div>';
+ if(sub=='gold')h+=ch(S.gh)+card('طلا — موجودی: '+f(S.g),'قیمت: '+f(S.gp)+(S.gp>=S.gl?' 🟢▲':' 🔴▼'),bt('bg',0,'خرید',S.c<S.gp)+bt('sg',0,'فروش',!S.g,'r'));
+ if(sub=='oil')h+=ch(S.oh)+card('نفت — بشکه: '+f(S.o),'قیمت: '+f(S.op)+(S.op>=S.ol?' 🟢▲':' 🔴▼'),bt('bo',0,'خرید',S.c<S.op)+bt('so',0,'فروش',!S.o,'r'));
  if(sub=='stock')h+=SN.map((n,i)=>card(n+' ×'+f(S.st[i]),'قیمت: '+f(S.sp[i])+' — سود دوره‌ای دارد',bt('bs',i,'خرید',S.c<S.sp[i])+bt('ss',i,'فروش',!S.st[i],'r'))).join('');
  if(sub=='inv'){h+=IV.map((v,i)=>card('سرمایه '+f(v[0]),f(v[2]*100)+'٪ سود بعد از '+f(v[1])+' ثانیه',bt('inv',i,'سرمایه‌گذاری',S.c<v[0]))).join('');h+=S.inv.map((v,i)=>{const r=Math.ceil((v.end-Date.now())/1000);return card('در جریان: '+f(v.a),r>0?f(r)+' ثانیه مانده':'آماده دریافت: '+f(v.a*(1+v.r)),bt('col',i,'دریافت',r>0))}).join('')}
  if(sub=='ms')h+='<div class="mut" style="margin-bottom:8px">مأموریت‌های روزانه</div>'+MS.map((m,i)=>{const d=S.ms.done.includes(i),v=Math.min(S.ms[m[1]],m[2]);return card(m[0],f(v)+' / '+f(m[2])+' — جایزه: '+f(m[3]),d?'✅':bt('ms',i,'دریافت جایزه',v<m[2]))}).join('');
  return h}
- if(tab=='boost')return '<h3>⚡ Boost</h3>'+B.map((b,i)=>card('Boost '+f(i+1),'کلیک ×'+f(b[1])+' (دائمی)',S.b>i?'✅':bt('boost',i,f(b[0]),S.c<b[0]||S.b<i))).join('')+card('قدرت کلیک ('+f(S.cp+1)+' از ۱۰۰)','پایه هر لمس: '+f(1+S.cp)+' — با Boost: '+f(click()),S.cp>=99?'حداکثر':bt('cp',0,'ارتقا '+f(cpc()),S.c<cpc()))+'<h3>🏅 سطح بازیکن</h3>'+T.map(t=>card(t[1],'سطح '+f(t[0]),S.lv>=t[0]?'✅':'🔒')).join('');
+ if(tab=='boost')return '<h3>⚡ Boost</h3>'+B.map((b,i)=>card('Boost '+f(i+1),'کلیک ×'+f(b[1])+' (دائمی)',S.b>i?'✅':bt('boost',i,f(b[0]),S.c<b[0]||S.b<i))).join('')+card('قدرت کلیک ('+f(S.cp+1)+' از ۱۰۰)','پایه هر لمس: '+f(1+S.cp)+' — با Boost: '+f(click()),S.cp>=99?'حداکثر':bt('cp',0,'ارتقا '+f(cpc()),S.c<cpc()))+card('👑 پرستیژ '+md(S.pr),S.lv>=50?'ریست کامل در ازای +۵۰٪ درآمد دائمی — الان ×'+pm().toFixed(1):'نیاز به سطح ۵۰ — الان ×'+pm().toFixed(1),bt('pres',0,'شروع دوباره',S.lv<50))+'<h3>🏅 سطح بازیکن</h3>'+T.map(t=>card(t[1],'سطح '+f(t[0]),S.lv>=t[0]?'✅':'🔒')).join('');
  return ''}
 function render(){if(tab=='home'||tab=='rank')return;$('view').innerHTML=view()}
 function go(t){tab=t;$('view').innerHTML=t=='home'?'<div class="coinwrap"><button id="coin">BAZAAR<br>SHAH<br>👑</button><div class="mut" style="margin-top:18px" id="cp"></div></div>':view();if(t=='home')$('coin').onpointerdown=tap;nav();if(t=='rank'){msg='';push().then(loadLB)}}
 function nav(){$('nav').innerHTML=[['home','🏠','خانه'],['workers','👷','کارگران'],['props','🏢','املاک'],['comps','🏭','شرکت‌ها'],['market','🛒','بازار'],['boost','⚡','Boost'],['rank','🏆','رتبه']].map(x=>`<button class="${tab==x[0]?'on':''}" onpointerdown="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join('')}
 function tap(e){const v=click();earn(v);S.ms.k++;if(S.ms.k%5==0)xp(1);const s=document.createElement('span');s.className='fl';s.textContent='+'+f(v);s.style.left=(e.clientX-15)+'px';s.style.top=(e.clientY-40)+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),900);upd()}
-function upd(){$('hc').textContent=f(S.c);$('hi').textContent=f(inc())+' در ثانیه';$('ha').textContent=f(assets());$('hl').textContent='سطح '+f(S.lv)+' — '+title();$('xpf').style.width=(S.lv>=50?100:S.xp/need()*100)+'%';const c=$('cp');if(c)c.textContent='هر لمس: '+f(click())+' سکه'}
+function upd(){$('hc').textContent=f(S.c);$('hi').textContent=f(inc())+' در ثانیه';$('ha').textContent=f(assets());$('hl').textContent='سطح '+f(S.lv)+' — '+title()+' '+md(S.pr);$('xpf').style.width=(S.lv>=50?100:S.xp/need()*100)+'%';const c=$('cp');if(c)c.textContent='هر لمس: '+f(click())+' سکه'}
 function tick(){if(S.ms.d!=day())S.ms={d:day(),k:0,h:0,p:0,e:0,done:[]};const g=inc();earn(g);if(g>0)xp(1);
- S.gl=S.gp;S.gp=Math.min(6000,Math.max(1500,S.gp*(1+(Math.random()-.5)*.04)));
- S.sp=S.sp.map((p,i)=>{const b=[100,500,2000][i];return Math.min(b*4,Math.max(b/3,p*(1+(Math.random()-.5)*.08)))});
+ if(!(S.ev&&Date.now()<S.ev.end)&&Math.random()<.012){const e=EV[Math.floor(Math.random()*EV.length)];S.ev={t:e[0],k:e[1],m:e[2],end:Date.now()+25000};toast(e[0])}
+ const bi=k=>S.ev&&S.ev.k==k&&Date.now()<S.ev.end?S.ev.m:0;
+ S.gl=S.gp;S.gp=Math.min(6000,Math.max(1500,S.gp*(1+(Math.random()-.5)*.04+bi('g'))));
+ S.ol=S.op;S.op=Math.min(5000,Math.max(800,S.op*(1+(Math.random()-.5)*.05+bi('o'))));
+ S.gh.push(S.gp);S.oh.push(S.op);if(S.gh.length>40)S.gh.shift();if(S.oh.length>40)S.oh.shift();
+ S.sp=S.sp.map((p,i)=>{const b=[100,500,2000][i];return Math.min(b*4,Math.max(b/3,p*(1+(Math.random()-.5)*.08+bi('s'))))});
  S.st.forEach((n,i)=>{S.c+=n*S.sp[i]*.0008});
  upd();render()}
 function offline(){const dt=Math.min((Date.now()-S.t)/1000,28800),g=inc()*dt;if(dt>60&&g>0){earn(g);setTimeout(()=>toast('درآمد آفلاین: '+f(g)+' سکه 💤'),400)}}
-offline();
+offline();chk();
 // ===== حساب کاربری و لیدربورد (Supabase) =====
 const SU='https://lhxdoqkxihrdqildbgpj.supabase.co',SK='sb_publishable_3pGVx9rt61MNaW_Ti310bw_BfHjbfkC';
 let A=null,LB=[],msg='';
@@ -132,9 +150,9 @@ async function api(path,o={}){const h={apikey:SK,'Content-Type':'application/jso
  const t=await r.text();let j=null;try{j=JSON.parse(t)}catch(e){}
  if(!r.ok)throw new Error((j&&(j.msg||j.error_description||j.message))||('خطا '+r.status));return j}
 async function pull(){const r=await api('/rest/v1/players?id=eq.'+A.id+'&select=name,save');
- if(r&&r[0]){A.name=r[0].name;saveA();const sv=r[0].save;if(sv&&sv.lv!==undefined){const L=S;S=Object.assign(def(),sv);const ca=assets();S=L;if(ca>assets()){S=Object.assign(def(),sv);offline()}}}}
+ if(r&&r[0]){A.name=r[0].name;saveA();const sv=r[0].save;if(sv&&sv.lv!==undefined){const L=S;S=ld(sv);const ca=assets(),cp=S.pr;S=L;if(cp>S.pr||(cp==S.pr&&ca>assets())){S=ld(sv);offline()}}}chk()}
 async function push(k){if(!A||!A.id)return;try{await api('/rest/v1/players?on_conflict=id',{m:'POST',h:{Prefer:'resolution=merge-duplicates,return=minimal'},b:{id:A.id,name:A.name||'بازیکن',assets:Math.floor(assets()),save:S,updated_at:new Date().toISOString()},k})}catch(e){}}
-async function loadLB(){try{LB=await api('/rest/v1/players?select=name,assets&order=assets.desc&limit=50')||[]}catch(e){msg=tr(e.message)}rr()}
+async function loadLB(){try{LB=await api('/rest/v1/players?select=name,assets,pr:save->pr&order=assets.desc&limit=50')||[]}catch(e){msg=tr(e.message)}rr()}
 function rr(){if(tab!='rank')return;const a=document.activeElement;if(a&&a.tagName=='INPUT')return;$('view').innerHTML=rankView()}
 async function doAuth(mode){const e=$('em').value.trim(),p=$('pw').value,n=($('nm').value||'').trim().slice(0,16);
  if(!e||p.length<6){msg='ایمیل و رمز (حداقل ۶ حرف) را وارد کن';return fr()}
@@ -149,10 +167,10 @@ function fr(){$('view').innerHTML=rankView()}
 function logout(){A=null;saveA();msg='';fr()}
 function rankView(){let h='<h3>🏆 رتبه‌بندی و حساب</h3>';
  if(!A)h+=`<div class="card" style="display:block"><div class="mut" style="margin-bottom:10px">برای ذخیره پیشرفت روی حساب و حضور در لیدربورد وارد شو.</div><input id="nm" placeholder="نام نمایشی (فقط برای ثبت‌نام)" maxlength="16"><input id="em" type="email" placeholder="ایمیل" dir="ltr"><input id="pw" type="password" placeholder="رمز (حداقل ۶ حرف)" dir="ltr"><div class="btns" style="justify-content:stretch"><button class="b" onclick="doAuth('in')">ورود</button><button class="b r" onclick="doAuth('up')">ثبت‌نام</button></div></div>`;
- else h+=card('👤 '+esc(A.name||'بازیکن'),'دارایی شما: '+f(assets())+' — پیشرفت روی حساب ذخیره می‌شود','<button class="b r" onclick="logout()">خروج</button>');
+ else h+=card('👤 '+esc(A.name||'بازیکن')+' '+md(S.pr),'دارایی شما: '+f(assets())+' — پیشرفت روی حساب ذخیره می‌شود','<button class="b r" onclick="logout()">خروج</button>');
  if(msg)h+=`<div style="color:var(--gold);margin:8px 4px;font-size:13px">${msg}</div>`;
  h+='<h3>۵۰ نفر برتر (بر اساس دارایی)</h3>';
- h+=LB.length?LB.map((p,i)=>card((i<3?['🥇','🥈','🥉'][i]:f(i+1)+'.')+' '+esc(p.name),'',`<b style="color:var(--gold)">${f(p.assets)}</b>`)).join(''):'<div class="mut">هنوز کسی در لیست نیست.</div>';
+ h+=LB.length?LB.map((p,i)=>card((i<3?['🥇','🥈','🥉'][i]:f(i+1)+'.')+' '+esc(p.name)+' '+md(+p.pr||0),'',`<b style="color:var(--gold)">${f(p.assets)}</b>`)).join(''):'<div class="mut">هنوز کسی در لیست نیست.</div>';
  return h+'<div style="text-align:center"><button class="b r" onclick="push().then(loadLB)">🔄 بروزرسانی</button></div>'}
 setInterval(()=>push(),30000);
 addEventListener('pagehide',()=>push(1));
