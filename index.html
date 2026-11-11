@@ -37,6 +37,17 @@ input{width:100%;margin-bottom:8px;padding:11px;border-radius:12px;border:1px so
 nav button{font-size:10px}nav button span{font-size:20px}
 #um{position:fixed;inset:0;background:#000c;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}#um>div{background:var(--card);border:2px solid var(--gold);border-radius:18px;padding:18px;max-width:420px;line-height:1.9;font-size:14px}
 #coin{display:flex;align-items:center;justify-content:center}#coin svg{pointer-events:none;filter:drop-shadow(0 4px 4px #0006)}#gear{position:absolute;top:8px;right:8px;width:42px;height:42px;border-radius:50%;border:none;background:#243a7a;font-size:22px;color:#fff;z-index:2}
+select{padding:11px;border-radius:12px;border:1px solid #2c4390;background:#0b1535;color:#fff;font:14px Tahoma}
+#mapb{position:absolute;top:8px;left:8px;width:46px;height:46px;border-radius:14px;border:none;background:#243a7a;padding:0;z-index:2;display:flex;align-items:center;justify-content:center}
+#mp{position:fixed;inset:0;z-index:8;background:var(--bg);display:flex;flex-direction:column;max-width:520px;margin:0 auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#mp .mt{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#0e1b44;border-bottom:1px solid #243a7a}
+#mp .mc{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;background:#0e1b44}
+#mp .mc button{flex:0 0 auto;padding:6px 12px;font-size:12px}
+#mv{position:relative;flex:1;min-height:150px;background:#08102b;touch-action:none;overflow:hidden}
+#ms{width:100%;height:100%;display:block;font-family:Tahoma,sans-serif}
+.mz{position:absolute;bottom:8px;left:8px;display:flex;flex-direction:column;gap:6px}
+.mz button{width:38px;height:38px;border-radius:12px;border:none;background:#243a7acc;color:#fff;font-size:22px}
+#mx{max-height:52%;overflow:auto;padding:10px 12px;background:#0e1b44;border-top:2px solid var(--gold);border-radius:18px 18px 0 0}
 </style></head><body>
 <div id="app">
 <header>
@@ -58,7 +69,7 @@ const MS=[['۱۰۰ بار روی تاج کلیک کن','k',100,500],['یک کا�
 const EV=[['📰 جهش قیمت طلا در بازار جهانی','g',.008],['📰 افت ناگهانی قیمت طلا','g',-.008],['📰 تحریم‌ها؛ نفت گران شد','o',.01],['📰 افت تقاضا؛ قیمت نفت ریخت','o',-.01],['📰 رشد بورس؛ سهام بالا رفت','s',.012],['📰 سقوط بورس؛ سهام ریخت','s',-.014]];
 const MD=['🥉','🥈','🥇','💎','👑','🔱'],md=n=>n>0?MD[Math.min(Math.floor((n-1)/5),5)].repeat((n-1)%5+1):'',VER=3;
 const day=()=>new Date().toDateString();
-const def=()=>({c:0,w:[0,0,0,0,0],wl:[0,0,0,0,0],p:P.map(_=>0),cm:C.map(_=>0),b:0,cp:0,xp:0,lv:1,g:0,gp:2500,gl:2500,st:[0,0,0],sp:[100,500,2000],inv:[],ms:{d:day(),k:0,h:0,p:0,e:0,done:[]},t:Date.now(),o:0,op:100,ol:100,gh:[2500],oh:[100],ev:null,pr:0,mv:0,vl:0,wg:0,wo:0,ex:0,sd:1,av:0,pv:1,lg:'fa'});
+const def=()=>({c:0,w:[0,0,0,0,0],wl:[0,0,0,0,0],p:P.map(_=>0),cm:C.map(_=>0),b:0,cp:0,xp:0,lv:1,g:0,gp:2500,gl:2500,st:[0,0,0],sp:[100,500,2000],inv:[],ms:{d:day(),k:0,h:0,p:0,e:0,done:[]},t:Date.now(),o:0,op:100,ol:100,gh:[2500],oh:[100],ev:null,pr:0,mv:0,vl:0,wg:0,wo:0,ex:0,sd:1,av:0,pv:1,lg:'fa',cn:'',iv:{},ic:{}});
 const ld=o=>{const s=Object.assign(def(),o);while(s.p.length<P.length)s.p.push(0);while(s.cm.length<C.length)s.cm.push(0);if((o.mv|0)<3){while(1e6*Math.pow(1.6,s.vl)<s.c)s.vl++;while(s.g>(s.wg?200*Math.pow(1.5,s.wg-1):0))s.wg++;while(s.o>(s.wo?200*Math.pow(1.5,s.wo-1):0))s.wo++}if(!o.pv){s.gp=s.gl=2500;s.gh=[2500];s.op=s.ol=100;s.oh=[100];s.pv=1}return s};
 function chk(){if(S.mv>=VER)return;S.mv=VER;S.c+=20000;S.ex+=20000;const d=document.createElement('div');d.id='um';d.innerHTML='<div><b style="color:var(--gold);font-size:17px">🎉 بروزرسانی جدید منتشر شد!</b><br>• ♛ واحد پول حالا «شاهی» است<br>• 📦 بخش انبار در شرکت‌ها: گاو صندوق پول، انبار طلا و انبار نفت با ارتقای بی‌نهایت<br>• 💱 خرید و فروش دلخواه طلا (گرم) و نفت (بشکه)<br>• 📈 قیمت پلکانی برای کارگران و املاک و مرتب‌سازی از کم‌درآمد به پردرآمد<br>• 📊 نمودار واقعی با محور قیمت و زمان<br>• ⚙️ تنظیمات (صدا، پروفایل، حساب) و ۸ پروفایل<br>• 👑 دکمه‌ی تاج جدید<br><b style="color:var(--gold)">🎁 هدیه: ۲۰۰۰۰ شاهی به حسابت اضافه شد!</b><button class="b" style="margin-top:12px;width:100%" onclick="this.parentNode.parentNode.remove()">عالیه! 🎁</button></div>';document.body.appendChild(d);save();upd();setTimeout(()=>push(),500)}
 const DICT=`کارگر ساده=Laborer
@@ -253,11 +264,271 @@ const AV=['👑','🦁','🐺','🦅','🐉','🤴','🧙','🦊'],ord=A=>A.map(
 const wc=i=>Math.ceil(W[i][1]*Math.pow(1.1,S.w[i])),pc=i=>Math.ceil(P[i][1]*Math.pow(1.15,S.p[i]));
 const capC=()=>1e6*Math.pow(1.6,S.vl),capG=()=>S.wg?200*Math.pow(1.5,S.wg-1):0,capO=()=>S.wo?200*Math.pow(1.5,S.wo-1):0,costV=()=>5e5*Math.pow(1.8,S.vl),costG=()=>2e5*Math.pow(1.8,S.wg),costO=()=>3e5*Math.pow(1.8,S.wo);
 function cl(){const k=capC();S.c=Math.min(S.c,k+S.ex);S.ex=Math.max(0,Math.min(S.ex,S.c-k));S.g=Math.min(S.g,capG());S.o=Math.min(S.o,capO())}
-let ac;function beep(){try{ac=ac||new(window.AudioContext||webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=660;g.gain.value=.04;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.05)}catch(e){}}
+// ===== صدا =====
+let ac;
+function au(){try{if(!ac){ac=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});const b=ac.createBuffer(1,1,22050),s=ac.createBufferSource();s.buffer=b;s.connect(ac.destination);s.start(0)}if(ac.state!='running')ac.resume()}catch(e){}return ac}
+function tn(fr,d,v,at,ty){const c=ac,o=c.createOscillator(),g=c.createGain(),t=c.currentTime+(at||0);o.type=ty||'sine';o.frequency.setValueAtTime(fr,t);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02)}
+function sfx(k){if(!S.sd||!au())return;try{if(k=='coin'){tn(988,.09,.09,0,'triangle');tn(1319,.12,.07,.04,'triangle')}else if(k=='ok'){tn(660,.12,.08);tn(880,.12,.08,.1);tn(1175,.2,.08,.2)}else if(k=='no'){tn(220,.2,.09,0,'sawtooth');tn(165,.25,.09,.12,'sawtooth')}else tn(780,.05,.06,0,'triangle')}catch(e){}}
+['pointerdown','pointerup','touchend','click','keydown'].forEach(t=>document.addEventListener(t,()=>{if(!ac||ac.state!='running')au()},true));
+document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('button');if(b&&b.id!='coin'&&!b.disabled)sfx('tick')},true);
+// ===== کشورها و سرمایه‌گذاری =====
+const MP='AAAAAAAAf8H//gAAAAAAAAAAAAAAAAAAAAAAAH/////+AAAAAAAAAAAAAAAAAAAAAAAP/////4AA/gAAAAAAAAAAAAAAAAAAAP8f///4AAcAAA8AAeAAAAAAAAAAAAAPwD///wAAAAAD4AH/wAAAAAAAAAAPwA8Af//4AAAAAHhD///wCAAAAD8AAf4z/gP//wAAB4AOD///////gAgf////x//4H//AAAP/h///////////+////////+H/gcAA//z///////////+//////+P+D+A+AB//////////////AP/////4EYB8AIAH9////////////+Af/////wH4A4AAAP5////////////8APwP///gH8AAAAAH4///////////+AAHgB///4H+AAAAGCz/////////+A4AAAAA////n/gAAAPDP/////////4A4AAAAAf///v/wAAAbv//////////8AwAAAAAP/////gAAAH////////////AAAAAAAD////8AAAAB///////////9AAAAAAAD////8AAAAD///////////9AAAAAAAD////+AAAAB//7/P//////7AAAAAAAD//9/gAAAAf5vwPP//////jgAAAAAAD////AAAAAfiX//v/////+CAAAAAAAD///+AAAAAfALf/n/////MGAAAAAAAB///8AAAAAeeRf///////mOAAAAAAAB///8AAAAAH/AA///////G8AAAAAAAAf//4AAAAAP/gB///////hAAAAAAAAAP//wAAAAAf//////////gAAAAAAAAAP/owAAAAA/////f/////gAAAAAAAAAF/AQAAAAB///+/v/////AAAAAAAAAAC/AAAAAAD/////z/////AAAAAAAAAAAfA4AAAAD////f/D///+gAAAAAAAAAAfGOAAAAH////v/B/z/wAAAAAAAAAAAPOBwAAAH////v+A/h+gAAAAAAAAAAAD8AAAAAH////38A/B/AgAAAAAAAAAAAfAAAAAH/////gAcAfggAAAAAAAAAAAHgAAAAH////+AAcAfgAAAAAAAAAAAABj+AAAD/////wAMAXAYAAAAAAAAAAAA//AAAB/////gAKASAYAAAAAAAAAAAAP/gAAA/////gACAYAYAAAAAAAAAAAAH/8AAAfP///AAAAMHAAAAAAAAAAAAAH/+AAAAD///AAAA8eAAAAAAAAAAAAAP/+AAAAD//+AAAAY+wAAAAAAAAAAAAP//AAAAD//8AAAAMfg4AAAAAAAAAAAP//8AAAB//wAAAAOdg+AAAAAAAAAAAf///AAAA//wAAAAGAgPgAAAAAAAAAAP///gAAA//wAAAAB4AHwAAAAAAAAAAH///AAAA//wAAAAAIAG4AAAAAAAAAAH///AAAA//4AAAAAAAAAAAAAAAAAAAD//+AAAA//4gAAAAABxAAAAAAAAAAAD//+AAAA//xgAAAAAPzgAAAAAAAAAAB//+AAAA//jgAAAAAf/gAAAAAAAAAAAf/8AAAA//DgAAAAA//wAAAAAAAAAAAf/8AAAAf/DgAAAAD//4CAAAAAAAAAA//4AAAAf/DAAAAAH//8AAAAAAAAAAA//gAAAAf+CAAAAAH//+AAAAAAAAAAA//AAAAAf+AAAAAAH//+AAAAAAAAAAA//AAAAAP8AAAAAAH//+AAAAAAAAAAA/+AAAAAH8AAAAAAH//+AAAAAAAAAAA/8AAAAAHwAAAAAAH4f8AAAAAAAAAAA/4AAAAAAAAAAAAADAH8AAAAAAAAAAB/wAAAAAAAAAAAAAAAD4AGAAAAAAAAB/AAAAAAAAAAAAAAAABgAGAAAAAAAAB8AAAAAAAAAAAAAAAAAwAMAAAAAAAAB8AAAAAAAAAAAAAAAAAQA4AAAAAAAAB4AAAAAAAAAAAAAAAAAABwAAAAAAAAD4AAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',MW=180,MH=71;
+const SE={o:['🛢','نفت و گاز','Oil & Gas',1.3,1.2],t:['💻','فناوری','Technology',1.5,1.3],f:['🏦','بانک و مالی','Banking & Finance',1.4,1],m:['⛏','معدن','Mining',1,1.1],a:['🌾','کشاورزی','Agriculture',.6,.8],i:['🏭','صنعت و تولید','Manufacturing',1,1],r:['🏖','گردشگری','Tourism',.8,.9],e:['☀️','انرژی پاک','Clean Energy',1.2,1.05],s:['🚢','بندر و حمل‌ونقل','Ports & Shipping',1.1,1]};
+const CD=`AF|افغانستان|Afghanistan|34|66|2|ma
+AL|آلبانی|Albania|41|20|2|ra
+DZ|الجزایر|Algeria|28|2.5|4|o
+AD|آندورا|Andorra|42.5|1.6|3|rf
+AO|آنگولا|Angola|-12|17.5|3|om
+AG|آنتیگوا و باربودا|Antigua and Barbuda|17.1|-61.8|2|r
+AR|آرژانتین|Argentina|-35|-65|5|am
+AM|ارمنستان|Armenia|40.2|44.5|2|mt
+AU|استرالیا|Australia|-25|134|7|mae
+AT|اتریش|Austria|47.5|14.5|6|if
+AZ|آذربایجان|Azerbaijan|40.3|47.7|4|o
+BS|باهاما|Bahamas|25|-77.4|3|rf
+BH|بحرین|Bahrain|26|50.5|4|fo
+BD|بنگلادش|Bangladesh|23.7|90.3|3|i
+BB|باربادوس|Barbados|13.2|-59.5|2|r
+BY|بلاروس|Belarus|53.7|28|3|ia
+BE|بلژیک|Belgium|50.6|4.6|6|fis
+BZ|بلیز|Belize|17.2|-88.7|2|r
+BJ|بنین|Benin|9.5|2.3|2|a
+BT|بوتان|Bhutan|27.4|90.4|2|er
+BO|بولیوی|Bolivia|-16.5|-64.5|3|mo
+BA|بوسنی و هرزگوین|Bosnia and Herzegovina|44|17.8|3|ie
+BW|بوتسوانا|Botswana|-22|24|3|mr
+BR|برزیل|Brazil|-10|-52|7|amo
+BN|برونئی|Brunei|4.5|114.7|4|o
+BG|بلغارستان|Bulgaria|42.7|25.5|3|it
+BF|بورکینافاسو|Burkina Faso|12.3|-1.5|2|ma
+BI|بوروندی|Burundi|-3.4|29.9|1|a
+CV|کیپ‌ورد|Cabo Verde|16|-24|2|r
+KH|کامبوج|Cambodia|12.5|105|3|ri
+CM|کامرون|Cameroon|5.7|12.4|3|oa
+CA|کانادا|Canada|58|-100|7|omf
+CF|جمهوری آفریقای مرکزی|Central African Republic|6.6|20.5|1|m
+TD|چاد|Chad|15|19|2|o
+CL|شیلی|Chile|-35|-71|5|mea
+CN|چین|China|35|103|9|ite
+CO|کلمبیا|Colombia|4.5|-73|4|oa
+KM|کومور|Comoros|-11.7|43.3|1|a
+CG|کنگو|Republic of the Congo|-1|15|2|o
+CD|جمهوری دموکراتیک کنگو|DR Congo|-3|23.5|3|m
+CR|کاستاریکا|Costa Rica|9.9|-84|3|rt
+HR|کرواسی|Croatia|45.1|15.5|3|rs
+CU|کوبا|Cuba|21.7|-79.5|2|ra
+CY|قبرس|Cyprus|35|33|3|rf
+CZ|چک|Czechia|49.8|15.5|5|i
+DK|دانمارک|Denmark|56|9.5|6|es
+DJ|جیبوتی|Djibouti|11.8|42.6|2|s
+DM|دومینیکا|Dominica|15.4|-61.4|1|r
+DO|جمهوری دومینیکن|Dominican Republic|18.9|-70.5|3|r
+EC|اکوادور|Ecuador|-1.4|-78.5|3|oa
+EG|مصر|Egypt|27|30|4|rso
+SV|السالوادور|El Salvador|13.8|-88.9|2|i
+GQ|گینه استوایی|Equatorial Guinea|1.6|10.5|2|o
+ER|اریتره|Eritrea|15.2|39|1|m
+EE|استونی|Estonia|58.7|25.5|4|t
+SZ|اسواتینی|Eswatini|-26.5|31.5|2|a
+ET|اتیوپی|Ethiopia|9|39.5|3|ae
+FJ|فیجی|Fiji|-17.7|178|2|r
+FI|فنلاند|Finland|64|26|6|ti
+FR|فرانسه|France|46.5|2.5|7|irf
+GA|گابن|Gabon|-0.8|11.6|3|o
+GM|گامبیا|Gambia|13.4|-15.4|1|r
+GE|گرجستان|Georgia|42|43.5|3|ra
+DE|آلمان|Germany|51|10|8|it
+GH|غنا|Ghana|7.9|-1.2|3|ma
+GR|یونان|Greece|39|22|4|rs
+GD|گرنادا|Grenada|12.1|-61.7|1|r
+GT|گواتمالا|Guatemala|15.5|-90.3|3|a
+GN|گینه|Guinea|10.5|-11|2|m
+GW|گینه بیسائو|Guinea-Bissau|12|-15|1|a
+GY|گویان|Guyana|5|-59|3|o
+HT|هائیتی|Haiti|19|-72.5|1|a
+HN|هندوراس|Honduras|14.8|-86.5|2|a
+HU|مجارستان|Hungary|47.2|19.5|4|i
+IS|ایسلند|Iceland|64.9|-18.5|4|er
+IN|هند|India|22|79|8|tia
+ID|اندونزی|Indonesia|-2.5|113|6|mao
+IR|ایران|Iran|32.5|54|4|om
+IQ|عراق|Iraq|33|43.7|3|o
+IE|ایرلند|Ireland|53.2|-8|6|tf
+IL|اسرائیل|Israel|31.4|34.9|6|t
+IT|ایتالیا|Italy|42.8|12.5|7|ir
+CI|ساحل عاج|Ivory Coast|7.6|-5.5|3|a
+JM|جامائیکا|Jamaica|18.1|-77.3|2|rm
+JP|ژاپن|Japan|36.5|138|8|ti
+JO|اردن|Jordan|31|36.5|3|rm
+KZ|قزاقستان|Kazakhstan|48|67|4|om
+KE|کنیا|Kenya|0.5|38|3|ar
+KI|کیریباتی|Kiribati|1.9|-157.4|1|r
+KW|کویت|Kuwait|29.3|47.6|5|o
+KG|قرقیزستان|Kyrgyzstan|41.5|74.6|2|m
+LA|لائوس|Laos|19.5|102.5|2|e
+LV|لتونی|Latvia|56.9|24.8|3|s
+LB|لبنان|Lebanon|33.9|35.9|2|fr
+LS|لسوتو|Lesotho|-29.6|28.2|1|m
+LR|لیبریا|Liberia|6.4|-9.4|1|m
+LY|لیبی|Libya|27|17|3|o
+LI|لیختن‌اشتاین|Liechtenstein|47.2|9.55|4|f
+LT|لیتوانی|Lithuania|55.2|23.9|4|i
+LU|لوکزامبورگ|Luxembourg|49.8|6.1|6|f
+MG|ماداگاسکار|Madagascar|-19|46.7|2|am
+MW|مالاوی|Malawi|-13.5|34|1|a
+MY|مالزی|Malaysia|4|102|5|tio
+MV|مالدیو|Maldives|3.2|73.2|3|r
+ML|مالی|Mali|17|-3.5|2|m
+MT|مالت|Malta|35.9|14.4|4|rf
+MH|جزایر مارشال|Marshall Islands|7.1|171|1|s
+MR|موریتانی|Mauritania|20.5|-10.5|2|m
+MU|موریس|Mauritius|-20.3|57.6|3|rf
+MX|مکزیک|Mexico|23.5|-102|6|io
+FM|میکرونزی|Micronesia|6.9|158.2|1|r
+MD|مولداوی|Moldova|47|28.5|2|a
+MC|موناکو|Monaco|43.7|7.4|5|fr
+MN|مغولستان|Mongolia|47|103|3|m
+ME|مونته‌نگرو|Montenegro|42.7|19.3|3|r
+MA|مراکش|Morocco|31.8|-6.5|4|are
+MZ|موزامبیک|Mozambique|-18|35|3|mo
+MM|میانمار|Myanmar|21|96|3|m
+NA|نامیبیا|Namibia|-22|17|3|m
+NR|نائورو|Nauru|-0.5|166.9|1|m
+NP|نپال|Nepal|28.3|84|2|er
+NL|هلند|Netherlands|52.2|5.5|7|fst
+NZ|نیوزیلند|New Zealand|-41|173|5|ar
+NI|نیکاراگوئه|Nicaragua|12.9|-85|2|a
+NE|نیجر|Niger|17|8|2|m
+NG|نیجریه|Nigeria|9.5|8|4|oa
+KP|کره شمالی|North Korea|40|127|1|m
+MK|مقدونیه شمالی|North Macedonia|41.6|21.7|2|i
+NO|نروژ|Norway|61|9|6|oe
+OM|عمان|Oman|21|57|4|os
+PK|پاکستان|Pakistan|30|70|3|ai
+PW|پالائو|Palau|7.5|134.5|1|r
+PS|فلسطین|Palestine|31.9|35.2|2|ar
+PA|پاناما|Panama|8.5|-80|4|sf
+PG|پاپوآ گینه نو|Papua New Guinea|-6.3|145|2|mo
+PY|پاراگوئه|Paraguay|-23|-58|3|ae
+PE|پرو|Peru|-9.5|-75|4|ma
+PH|فیلیپین|Philippines|12.5|122|4|ir
+PL|لهستان|Poland|52|19|5|i
+PT|پرتغال|Portugal|39.5|-8|4|re
+QA|قطر|Qatar|25.3|51.2|6|of
+RO|رومانی|Romania|45.9|25|4|it
+RU|روسیه|Russia|60|90|6|om
+RW|رواندا|Rwanda|-2|29.9|2|t
+KN|سنت کیتس و نویس|Saint Kitts and Nevis|17.3|-62.7|1|r
+LC|سنت لوسیا|Saint Lucia|13.9|-61|1|r
+VC|سنت وینسنت و گرنادین|Saint Vincent and the Grenadines|13.2|-61.2|1|r
+WS|ساموآ|Samoa|-13.6|-172.4|1|r
+SM|سن‌مارینو|San Marino|43.9|12.45|3|f
+ST|سائوتومه و پرنسیپ|São Tomé and Príncipe|0.3|6.7|1|a
+SA|عربستان سعودی|Saudi Arabia|24|45|7|o
+SN|سنگال|Senegal|14.5|-14.5|2|o
+RS|صربستان|Serbia|44|20.8|3|ia
+SC|سیشل|Seychelles|-4.7|55.5|3|r
+SL|سیرالئون|Sierra Leone|8.5|-11.8|1|m
+SG|سنگاپور|Singapore|1.35|103.8|7|fst
+SK|اسلواکی|Slovakia|48.7|19.5|4|i
+SI|اسلوونی|Slovenia|46.1|14.8|4|i
+SB|جزایر سلیمان|Solomon Islands|-9|160|1|r
+SO|سومالی|Somalia|5|46|1|a
+ZA|آفریقای جنوبی|South Africa|-29|24|5|m
+KR|کره جنوبی|South Korea|36.5|128|7|ti
+SS|سودان جنوبی|South Sudan|7.5|30|1|o
+ES|اسپانیا|Spain|40|-3.7|6|re
+LK|سری‌لانکا|Sri Lanka|7.8|80.7|2|ra
+SD|سودان|Sudan|15.5|30|2|am
+SR|سورینام|Suriname|4|-56|2|m
+SE|سوئد|Sweden|62|15|6|ti
+CH|سوئیس|Switzerland|46.8|8.2|7|f
+SY|سوریه|Syria|35|38.5|2|a
+TW|تایوان|Taiwan|23.7|121|7|t
+TJ|تاجیکستان|Tajikistan|38.8|71|2|e
+TZ|تانزانیا|Tanzania|-6.4|34.9|3|mr
+TH|تایلند|Thailand|15|101|5|ri
+TL|تیمور شرقی|Timor-Leste|-8.8|125.9|1|o
+TG|توگو|Togo|8.6|1|2|s
+TO|تونگا|Tonga|-21.2|-175.2|1|r
+TT|ترینیداد و توباگو|Trinidad and Tobago|10.5|-61.3|3|o
+TN|تونس|Tunisia|34|9.5|3|ra
+TR|ترکیه|Turkey|39|35|6|ir
+TM|ترکمنستان|Turkmenistan|39|59.5|3|o
+TV|تووالو|Tuvalu|-8.5|179.2|1|r
+UG|اوگاندا|Uganda|1.4|32.3|2|a
+UA|اوکراین|Ukraine|49|31.5|4|ai
+AE|امارات متحده عربی|United Arab Emirates|24.3|54.4|7|ofsr
+GB|بریتانیا|United Kingdom|53|-1.7|8|ft
+US|ایالات متحده|United States|39|-98|9|tfi
+UY|اروگوئه|Uruguay|-32.8|-56|4|a
+UZ|ازبکستان|Uzbekistan|41.5|64|3|ma
+VU|وانواتو|Vanuatu|-16|167|1|r
+VE|ونزوئلا|Venezuela|7|-66|3|o
+VN|ویتنام|Vietnam|16|107.5|5|i
+YE|یمن|Yemen|15.5|47.5|1|s
+ZM|زامبیا|Zambia|-14|27.5|2|m
+ZW|زیمبابوه|Zimbabwe|-19|30|2|m`.split('\n').map(l=>{const x=l.split('|');return{c:x[0],fa:x[1],en:x[2],la:+x[3],lo:+x[4],p:+x[5],s:x[6]}});
+const CI={};CD.forEach(c=>CI[c.c]=c);
+const L=(a,b)=>S.lg=='en'?b:a;
+const cname=c=>L(c.fa,c.en);
+const fg=c=>typeof c=='string'&&/^[A-Z]{2}$/.test(c)&&CI[c]?String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0))):'';
+const ask=(c,s)=>{const v=2e4*Math.pow(2.9,c.p-1)*SE[s][3],m=Math.pow(10,Math.floor(Math.log10(v))-1);return Math.round(v/m)*m};
+const yv=(c,s)=>Math.max(1,Math.round(ask(c,s)*(.0009+.00014*c.p)*SE[s][4]));
+const ivy=k=>{const x=k.split(':'),c=CI[x[0]];return c&&SE[x[1]]?yv(c,x[1]):0};
+function cnCard(){const o=CD.slice().sort((a,b)=>cname(a).localeCompare(cname(b),S.lg=='en'?'en':'fa'));return `<div class="card"><b>🌍 ${L('کشور','Country')}</b><select onchange="act('cn',this.value)" style="width:60%"><option value="">${L('— انتخاب کن —','— Select —')}</option>${o.map(c=>`<option value="${c.c}" ${S.cn==c.c?'selected':''}>${fg(c.c)} ${cname(c)}</option>`).join('')}</select></div>`}
+// ===== نقشه =====
+let mo=0,msel='',mmsg=null,mof={},mt={k:1,x:0,y:0,k0:1,w:0,h:0},mps=new Map(),mst=null;
+const MR=[['🌍','جهان','World',0,25,1],['🌎','آمریکا','Americas',-80,12,2.3],['🏰','اروپا','Europe',15,52,5],['🌍','آفریقا','Africa',18,2,2.8],['🕌','خاورمیانه','Middle East',47,30,5],['🌏','آسیا','Asia',95,35,2.6],['🦘','اقیانوسیه','Oceania',140,-25,3]];
+const MAPIC='<svg viewBox="0 0 48 48" width="34" height="34"><path d="M5 11l12-4v30L5 41z" fill="#4caf7a"/><path d="M17 7l14 4v30l-14-4z" fill="#8bd49a"/><path d="M31 11l12-4v30l-12 4z" fill="#5aa9e6"/><path d="M26 9c-4.4 0-8 3.4-8 7.6 0 5.6 8 14.4 8 14.4s8-8.8 8-14.4C34 12.4 30.4 9 26 9z" fill="#ea4b4b" stroke="#fff" stroke-width="1.5"/><circle cx="26" cy="16.5" r="3" fill="#fff"/></svg>';
+function mpath(){const b=atob(MP);let d='';for(let r=0;r<MH;r++)for(let c=0;c<MW;c++){const i=r*MW+c;if(b.charCodeAt(i>>3)>>(7-(i&7))&1)d+='M'+(c*2+1)+' '+(r*2+1)+'h0'}return d}
+const pcol=p=>{const t=(p-1)/8;return `rgb(${Math.round(159+96*t)},${Math.round(176+34*t)},${Math.round(222-148*t)})`};
+function openMap(){if($('mp'))return;const d=document.createElement('div');d.id='mp';
+ d.innerHTML=`<div class="mt"><b style="color:var(--gold)">🌍 ${L('سرمایه‌گذاری جهانی','Global investing')}</b><span class="mut" id="mi"></span><button class="b r" style="padding:6px 14px" onpointerdown="closeMap()">✕</button></div><div class="mc">${MR.map((r,i)=>`<button class="b r" onpointerdown="mfly(${i})">${r[0]} ${L(r[1],r[2])}</button>`).join('')}</div><div id="mv"><svg id="ms"><g id="mg"><path d="${mpath()}" stroke="#3f5fc4" stroke-width="1.5" stroke-linecap="round" fill="none"/></g><g id="mk"></g><g id="mf"></g></svg><div class="mz"><button onpointerdown="mzoomAt(1.6)">+</button><button onpointerdown="mzoomAt(1/1.6)">−</button></div></div><div id="mx"></div>`;
+ document.body.appendChild(d);mo=1;minit();msheet(1);mfit(1);if(window.ResizeObserver)new ResizeObserver(()=>mfit(0)).observe($('mv'))}
+function closeMap(){const d=$('mp');if(d)d.remove();mo=0;msel='';mmsg=null;mps.clear()}
+function mclamp(){const T=mt,W=360*T.k,H=142*T.k;T.x=W<=T.w?(T.w-W)/2:Math.min(0,Math.max(T.w-W,T.x));T.y=H<=T.h?(T.h-H)/2:Math.min(0,Math.max(T.h-H,T.y))}
+function mfit(init){const v=$('mv'),s=$('ms');if(!v)return;const r=v.getBoundingClientRect();mt.w=r.width;mt.h=r.height;s.setAttribute('viewBox','0 0 '+r.width+' '+r.height);const k0=r.width/360;if(init){mt.k0=k0;mt.k=k0}else{const z=mt.k/mt.k0;mt.k0=k0;mt.k=k0*z}mclamp();mdraw()}
+function mzoomAt(f,x1,y1,x0,y0){const T=mt;if(x1==null){x1=T.w/2;y1=T.h/2}if(x0==null){x0=x1;y0=y1}const mx=(x0-T.x)/T.k,my=(y0-T.y)/T.k;T.k=Math.max(T.k0,Math.min(T.k0*16,T.k*f));T.x=x1-mx*T.k;T.y=y1-my*T.k;mclamp();mdraw()}
+function mfly(i){const r=MR[i],T=mt;msel='';mmsg=null;msheet(1);mfit(0);T.k=T.k0*r[5];T.x=T.w/2-T.k*(r[3]+180);T.y=T.h/2-T.k*(84-r[4]);mclamp();mdraw()}
+function minit(){const v=$('mv'),loc=e=>{const r=v.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+ v.onpointerdown=e=>{try{v.setPointerCapture(e.pointerId)}catch(x){}mps.set(e.pointerId,loc(e));if(mps.size==1)mst={m:0,multi:0};else if(mst)mst.multi=1};
+ v.onpointermove=e=>{const o=mps.get(e.pointerId);if(!o)return;const n=loc(e);
+  if(mps.size==1){mst.m+=Math.abs(n.x-o.x)+Math.abs(n.y-o.y);mt.x+=n.x-o.x;mt.y+=n.y-o.y;o.x=n.x;o.y=n.y;mclamp();mdraw()}
+  else if(mps.size==2){const a=[...mps.values()],c0={x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2},d0=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);o.x=n.x;o.y=n.y;const c1={x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2},d1=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(d0>5)mzoomAt(d1/d0,c1.x,c1.y,c0.x,c0.y)}};
+ v.onpointerup=v.onpointercancel=e=>{const had=mps.delete(e.pointerId);if(had&&mps.size==0&&mst&&!mst.multi&&mst.m<10&&e.type=='pointerup'){const p=loc(e);mtap(p.x,p.y)}};
+ v.onwheel=e=>{e.preventDefault();const p=loc(e);mzoomAt(e.deltaY<0?1.25:1/1.25,p.x,p.y)}}
+function mtap(px,py){const T=mt;let b=null,bd=24*24;CD.forEach(c=>{const x=T.x+T.k*(c.lo+180),y=T.y+T.k*(84-c.la),d=(x-px)*(x-px)+(y-py)*(y-py);if(d<bd){bd=d;b=c}});if(!b)return;msel=b.c;mmsg=null;msheet(1);mfit(0);T.x=T.w/2-T.k*(b.lo+180);T.y=T.h/2-T.k*(84-b.la);mclamp();mdraw()}
+function mdraw(){const T=mt,g=$('mg'),mk=$('mk');if(!g||!mk)return;g.setAttribute('transform','translate('+T.x+' '+T.y+') scale('+T.k+')');const z=T.k/T.k0,fc=Math.min(1.25,.6+.18*z),own={};Object.keys(S.iv).forEach(k=>own[k.split(':')[0]]=1);let h='',fl='';
+ CD.forEach(c=>{const x=T.x+T.k*(c.lo+180),y=T.y+T.k*(84-c.la);if(x<-20||y<-20||x>T.w+20||y>T.h+20)return;const r=(2.4+.3*c.p)*fc;
+  h+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${pcol(c.p)}" stroke="${own[c.c]?'#4cd964':'#0b1535'}" stroke-width="${own[c.c]?2:.8}"/>`;
+  if(z>=3.2&&c.c!=msel)fl+=`<text x="${x.toFixed(1)}" y="${(y-r-3).toFixed(1)}" font-size="12" text-anchor="middle">${fg(c.c)}</text>`});
+ const c=CI[msel];if(c){const x=T.x+T.k*(c.lo+180),y=T.y+T.k*(84-c.la),r=(2.4+.3*c.p)*fc;h+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r+4).toFixed(1)}" fill="none" stroke="#fff" stroke-width="2"/>`;fl+=`<text x="${x.toFixed(1)}" y="${(y-r-8).toFixed(1)}" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke">${fg(c.c)} ${cname(c)}</text>`}
+ mk.innerHTML=h;$('mf').innerHTML=fl}
+function msheet(force){const m=$('mx');if(!m)return;const e=document.activeElement;if(!force&&e&&m.contains(e)&&e.tagName=='INPUT')return;const st=m.scrollTop;m.innerHTML=sheetH();m.scrollTop=st;const n=Object.keys(S.iv).length,i=$('mi'),y=Object.keys(S.iv).reduce((s,k)=>s+ivy(k),0)*pm();if(i)i.textContent=f(n)+' '+L('سهام','stake(s)')+' — '+f(y)+' '+L('در ثانیه','per second')}
+function sheetH(){const c=CI[msel];
+ if(!c)return `<div class="mut" style="text-align:center;padding:6px 4px;line-height:1.9">${L('روی یک کشور بزن و برایش قیمت پیشنهاد بده. هر نقطه یک کشور است؛ نقطه‌ی بزرگ‌تر و طلایی‌تر یعنی پتانسیل سرمایه‌گذاری بیشتر. با دو انگشت زوم کن و با یک انگشت جابه‌جا شو.','Tap a country and make it an offer. Each dot is a country; bigger, more golden dots mean higher investment potential. Pinch to zoom, drag to move.')}</div>`;
+ const st=Math.round(c.p/9*5),lab=c.p>=8?L('عالی','Excellent'):c.p>=6?L('خوب','Good'):c.p>=4?L('متوسط','Average'):L('کم','Low'),dif=c.p>=8?L('سخت‌گیر','Tough'):c.p>=5?L('متوسط','Moderate'):L('منعطف','Flexible');
+ let h=`<div style="margin-bottom:8px"><b style="font-size:17px">${fg(c.c)} ${cname(c)}</b><div class="mut">${L('پتانسیل','Potential')}: <span style="color:var(--gold)">${'★'.repeat(st)}${'☆'.repeat(5-st)}</span> ${lab} (${f(c.p)}/${f(9)}) — ${L('چانه‌زنی','Bargaining')}: ${dif}</div></div>`;
+ if(mmsg)h+=`<div style="padding:8px 10px;border-radius:12px;margin-bottom:8px;font-size:13px;background:${mmsg[0]=='ok'?'#1f6b3a':'#7a2430'}">${mmsg[1]}</div>`;
+ for(const s of c.s)h+=secCard(c,s);return h}
+function secCard(c,s){const k=c.c+':'+s,E=SE[s],a=ask(c,s),y=yv(c,s),nm=E[0]+' '+L(E[1],E[2]),own=S.iv[k];
+ if(own)return card(nm,'✅ '+L('سهام شماست','Your stake')+' — '+L('پرداختی','paid')+' '+f(own.p)+' — '+f(y*pm())+' '+L('شاهی/ثانیه','shahi/s'),'');
+ const w=Math.ceil(((S.ic[k]||0)-Date.now())/1000),v=mof[k]!=null?mof[k]:a,pc=S.lg=='en'?'%':'٪';
+ return `<div class="card" style="display:block"><b>${nm}</b><div class="mut">${L('قیمت اعلامی','Asking price')}: ${f(a)} — ${L('سود','Profit')}: ${f(y)} ${L('شاهی/ثانیه','shahi/s')} — ${L('بازگشت سرمایه','Payback')}: ~${f(Math.ceil(a/y/60))} ${L('دقیقه','min')}</div><div style="display:flex;gap:6px;margin:8px 0 6px"><input type="number" inputmode="numeric" min="1" id="of_${k}" value="${esc(v)}" oninput="mof['${k}']=this.value" style="margin:0;flex:1;min-width:0"><button class="b" ${w>0?'disabled':''} onpointerdown="moffer('${c.c}','${s}')">${w>0?'⏳ '+f(w):L('پیشنهاد قیمت','Make offer')}</button></div><div class="btns" style="justify-content:flex-start">${[.9,.8,.7].map(q=>`<button class="b r" style="padding:5px 10px;font-size:11px" onpointerdown="mof['${k}']=${Math.round(a*q)};msheet(1)">${f(q*100)}${pc}</button>`).join('')}</div></div>`}
+function moffer(cd,s){const c=CI[cd],k=cd+':'+s;if(!c||!SE[s]||S.iv[k])return;const a=ask(c,s),el=$('of_'+k),o=Math.floor(+(el?el.value:a));mof[k]=el?el.value:a;
+ const bad=t=>{mmsg=['no',t];sfx('no');msheet(1);mdraw()};
+ if(!(o>0))return bad(L('مقدار نامعتبر','Invalid amount'));
+ if((S.ic[k]||0)>Date.now())return bad(L('کمی صبر کن و دوباره پیشنهاد بده','Wait a moment before offering again'));
+ const pay=Math.min(o,a);if(S.c<pay)return bad(L('شاهی کافی نیست','Not enough shahi'));
+ const lo=.55+.03*c.p,hi=Math.min(1,lo+.2),res=a*(lo+Math.random()*(hi-lo));
+ if(o<res){S.ic[k]=Date.now()+8000;return bad(o<a*lo?L('😤 این قیمت خیلی پایین است؛ پیشنهاد را رد کردند!','😤 That price is far too low — offer rejected!'):L('🤔 نزدیک بود، ولی رد شد. کمی بالاتر پیشنهاد بده.','🤔 Close, but rejected. Offer a bit more.'))}
+ S.c-=pay;S.iv[k]={p:pay};xp(60);const dc=Math.round((1-pay/a)*100);mmsg=['ok',L('✅ پیشنهادت پذیرفته شد!','✅ Offer accepted!')+(dc>0?' '+L('('+f(dc)+'٪ تخفیف)','('+dc+'% discount)'):'')];sfx('ok');save();upd();msheet(1);mdraw()}
+
 const CS=()=>'<div class="sub">'+[['c','🏭 شرکت‌ها'],['w','📦 انبار']].map(x=>`<button class="b ${csub==x[0]?'':'r'}" onpointerdown="act('csub','${x[0]}')">${x[1]}</button>`).join('')+'</div>';
 const WH=()=>[['🔐 گاو صندوق پول',S.c,capC(),S.vl,costV()],['🥇 انبار طلا (گرم)',S.g,capG(),S.wg,costG()],['🛢 انبار نفت (بشکه)',S.o,capO(),S.wo,costO()]].map((x,i)=>card(x[0]+' — سطح '+f(x[3]),'ظرفیت: '+f(x[2])+' — پر شده: '+f(x[1])+(x[2]?' ('+f(Math.floor(x[1]/x[2]*100))+'٪)':''),bt('wh',i,(x[3]?'ارتقا ':'خرید ')+f(x[4]),S.c<x[4]))).join('')+'<div class="mut">اگر انبار پر باشد، مازاد دور ریخته می‌شود.</div>';
 const TRD=(nm,u,have,pr,last,qv,cap,hist,ba,sa,qk,ms)=>ch(hist,ms)+'<div class="mut" style="margin-bottom:8px">محور عمودی: قیمت (♛) — محور افقی: زمان</div>'+card(nm+' — '+f(have)+' / '+f(cap)+' '+u,'قیمت هر '+u+': '+f(pr)+(pr>=last?' 🟢▲':' 🔴▼')+' — جمع: '+f(Math.max(0,Math.floor(+qv||0))*pr),'')+`<div class="card"><input type="number" inputmode="numeric" min="1" value="${qv}" oninput="${qk}=this.value" style="margin:0;flex:1;min-width:0"><div class="btns">${bt(ba,0,'خرید')+bt(sa,0,'فروش',0,'r')}</div></div>`;
-function setView(){let h='<h3>⚙️ تنظیمات</h3>'+card('🔊 صدا',S.sd?'روشن':'خاموش',bt('snd',0,S.sd?'خاموش کن':'روشن کن',0,'r'))+card('🌐 زبان','',bt('lg',"'fa'",'فارسی',0,S.lg=='fa'?'':'r')+bt('lg',"'en'",'English',0,S.lg=='en'?'':'r'));h+='<h3>🖼 پروفایل</h3><div class="sub" style="flex-wrap:wrap">'+AV.map((a,i)=>`<button class="b ${S.av==i?'':'r'}" style="font-size:26px;flex:0 0 22%;padding:6px" onpointerdown="act('av',${i})">${a}</button>`).join('')+'</div><h3>👤 حساب</h3>'+accH();if(msg)h+=`<div style="color:var(--gold);margin:8px 4px;font-size:13px">${msg}</div>`;return h}
+function setView(){let h='<h3>⚙️ تنظیمات</h3>'+card('🔊 صدا',S.sd?'روشن':'خاموش',bt('snd',0,S.sd?'خاموش کن':'روشن کن',0,'r'))+card('🌐 زبان','',bt('lg',"'fa'",'فارسی',0,S.lg=='fa'?'':'r')+bt('lg',"'en'",'English',0,S.lg=='en'?'':'r'))+cnCard();h+='<h3>🖼 پروفایل</h3><div class="sub" style="flex-wrap:wrap">'+AV.map((a,i)=>`<button class="b ${S.av==i?'':'r'}" style="font-size:26px;flex:0 0 22%;padding:6px" onpointerdown="act('av',${i})">${a}</button>`).join('')+'</div><h3>👤 حساب</h3>'+accH();if(msg)h+=`<div style="color:var(--gold);margin:8px 4px;font-size:13px">${msg}</div>`;return h}
 const pm=()=>1+S.pr*.5,uc=i=>C[i][1]*[0,2,5,12][S.cm[i]];
 const PS=()=>'<div class="sub">'+[['h','🏠 مسکن'],['v','🚗 وسیله نقلیه']].map(x=>`<button class="b ${psub==x[0]?'':'r'}" onpointerdown="act('psub','${x[0]}')">${x[1]}</button>`).join('')+'</div>';
 const EB=()=>S.ev&&Date.now()<S.ev.end?card(S.ev.t,'خبر فوری بازار',''):'';
@@ -266,8 +537,8 @@ for(let k=0;k<=4;k++){const v=mn+r*k/4,y=Y(v),x=L+k/4*(W-L-Rm);g+=`<line x1="${L
 const pts=a.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' '),c=a[n]>=a[0]?'#4cd964':'#ff5a5a';
 return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;background:#0b1535;border-radius:10px;margin-bottom:6px">${g}<line x1="${L}" y1="${T}" x2="${L}" y2="${H-Bm}" stroke="#9fb0de"/><line x1="${L}" y1="${H-Bm}" x2="${W-Rm}" y2="${H-Bm}" stroke="#9fb0de"/><polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/><circle cx="${X(n)}" cy="${Y(a[n])}" r="3.5" fill="${c}"/></svg>`};
 const click=()=>(1+S.cp)*mult()*pm();
-const inc=()=>{let s=0;W.forEach((w,i)=>s+=S.w[i]*w[2]*(1+S.wl[i]));P.forEach((p,i)=>s+=S.p[i]*p[2]);C.forEach((c,i)=>{if(S.cm[i])s+=c[2]*CM[S.cm[i]-1]});return s*pm()};
-const assets=()=>{let s=S.c+S.g*S.gp+S.o*S.op;W.forEach((w,i)=>s+=S.w[i]*w[1]);P.forEach((p,i)=>s+=S.p[i]*p[1]);C.forEach((c,i)=>{if(S.cm[i])s+=c[1]});S.st.forEach((n,i)=>s+=n*S.sp[i]);S.inv.forEach(v=>s+=v.a);return s};
+const inc=()=>{let s=0;W.forEach((w,i)=>s+=S.w[i]*w[2]*(1+S.wl[i]));P.forEach((p,i)=>s+=S.p[i]*p[2]);C.forEach((c,i)=>{if(S.cm[i])s+=c[2]*CM[S.cm[i]-1]});Object.keys(S.iv).forEach(k=>s+=ivy(k));return s*pm()};
+const assets=()=>{let s=S.c+S.g*S.gp+S.o*S.op;W.forEach((w,i)=>s+=S.w[i]*w[1]);P.forEach((p,i)=>s+=S.p[i]*p[1]);C.forEach((c,i)=>{if(S.cm[i])s+=c[1]});S.st.forEach((n,i)=>s+=n*S.sp[i]);S.inv.forEach(v=>s+=v.a);Object.values(S.iv).forEach(v=>s+=v.p);return s};
 const need=()=>S.lv*100;
 const title=()=>{let t=T[0][1];T.forEach(x=>{if(S.lv>=x[0])t=x[1]});return t};
 function xp(n){S.xp+=n;while(S.xp>=need()&&S.lv<50){S.xp-=need();S.lv++;toast('🎉 سطح '+f(S.lv)+' — '+title())}}
@@ -299,9 +570,10 @@ function act(a,i,j){
  else if(a=='wh'){const k=['vl','wg','wo'][i];if(spend([costV,costG,costO][i]())){S[k]++;xp(30)}}
  else if(a=='snd'){S.sd=S.sd?0:1}
  else if(a=='av'){S.av=i;push()}
+ else if(a=='cn'){S.cn=CI[i]?i:'';push()}
  else if(a=='bo'){const n=Math.floor(+qo);if(!(n>0))return toast('مقدار نامعتبر');if(n>capO()-S.o)return toast('جای انبار نفت کافی نیست');if(spend(n*S.op))S.o+=n}
  else if(a=='so'){const n=Math.floor(+qo);if(!(n>0))return toast('مقدار نامعتبر');if(n>S.o)return toast('نفت کافی نداری');S.o-=n;S.c+=n*S.op}
- else if(a=='pres'){if(S.lv>=50&&confirm(TT('همه‌چیز ریست می‌شود ولی ۵۰٪ درآمد دائمی می‌گیری. ادامه؟'))){S=ld({pr:S.pr+1,mv:S.mv,gh:S.gh,oh:S.oh,pv:1,gp:S.gp,gl:S.gl,op:S.op,ol:S.ol,av:S.av,sd:S.sd});toast('👑 پرستیژ '+f(S.pr)+' — '+md(S.pr));push()}}
+ else if(a=='pres'){if(S.lv>=50&&confirm(TT('همه‌چیز ریست می‌شود ولی ۵۰٪ درآمد دائمی می‌گیری. ادامه؟'))){S=ld({pr:S.pr+1,mv:S.mv,gh:S.gh,oh:S.oh,pv:1,gp:S.gp,gl:S.gl,op:S.op,ol:S.ol,av:S.av,sd:S.sd,cn:S.cn});toast('👑 پرستیژ '+f(S.pr)+' — '+md(S.pr));push()}}
  render(1);upd()}
 const cpc=()=>Math.floor(200*Math.pow(1.12,S.cp));
 const bt=(a,i,t,dis,cls)=>`<button class="b ${cls||''}" ${dis?'disabled':''} onpointerdown="act('${a}',${i})">${t}</button>`;
@@ -322,11 +594,11 @@ function view(){
  return h}
  if(tab=='boost')return '<h3>⚡ Boost</h3>'+B.map((b,i)=>card('Boost '+f(i+1),'کلیک ×'+f(b[1])+' (دائمی)',S.b>i?'✅':bt('boost',i,f(b[0]),S.c<b[0]||S.b<i))).join('')+card('قدرت کلیک ('+f(S.cp+1)+' / ۱۰۰)','پایه هر لمس: '+f(1+S.cp)+' — با Boost: '+f(click()),S.cp>=99?'حداکثر':bt('cp',0,'ارتقا '+f(cpc()),S.c<cpc()))+card('👑 پرستیژ '+md(S.pr),S.lv>=50?'ریست کامل در ازای +۵۰٪ درآمد دائمی — الان ×'+pm().toFixed(1):'نیاز به سطح ۵۰ — الان ×'+pm().toFixed(1),bt('pres',0,'شروع دوباره',S.lv<50))+'<h3>🏅 سطح بازیکن</h3>'+T.map(t=>card(t[1],'سطح '+f(t[0]),S.lv>=t[0]?'✅':'🔒')).join('');
  return ''}
-function render(force){if(tab=='home'||tab=='rank')return;const e=document.activeElement;if(!force&&e&&e.tagName=='INPUT')return;$('view').innerHTML=view()}
-function go(t){tab=t;$('view').innerHTML=t=='home'?'<button id="gear">⚙️</button><div class="coinwrap"><button id="coin"><svg viewBox="0 0 100 100" width="140" height="140"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c9"/><stop offset="1" stop-color="#d98e00"/></linearGradient></defs><path d="M12 72L8 28l24 20 18-30 18 30 24-20-4 44z" fill="url(#cg)" stroke="#7a4a00" stroke-width="3" stroke-linejoin="round"/><rect x="12" y="76" width="76" height="13" rx="4" fill="url(#cg)" stroke="#7a4a00" stroke-width="3"/><circle cx="8" cy="26" r="5" fill="#e53935"/><circle cx="50" cy="15" r="5.5" fill="#1e88e5"/><circle cx="92" cy="26" r="5" fill="#43a047"/><circle cx="30" cy="82.5" r="3" fill="#e53935"/><circle cx="50" cy="82.5" r="3" fill="#1e88e5"/><circle cx="70" cy="82.5" r="3" fill="#43a047"/></svg></button><div class="mut" style="margin-top:18px" id="cp"></div><div id="cw" style="width:100%;max-width:340px;margin-top:14px"></div></div>':view();if(t=='home'){$('coin').onpointerdown=tap;$('gear').onpointerdown=()=>go('set')}if(t=='set')msg='';nav();if(t=='rank'){msg='';push().then(loadLB)}}
+function render(force){if(tab=='home'||tab=='rank')return;const e=document.activeElement;if(!force&&e&&(e.tagName=='INPUT'||e.tagName=='SELECT'))return;$('view').innerHTML=view()}
+function go(t){tab=t;$('view').innerHTML=t=='home'?'<button id="mapb">'+MAPIC+'</button><button id="gear">⚙️</button><div class="coinwrap"><button id="coin"><svg viewBox="0 0 100 100" width="140" height="140"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c9"/><stop offset="1" stop-color="#d98e00"/></linearGradient></defs><path d="M12 72L8 28l24 20 18-30 18 30 24-20-4 44z" fill="url(#cg)" stroke="#7a4a00" stroke-width="3" stroke-linejoin="round"/><rect x="12" y="76" width="76" height="13" rx="4" fill="url(#cg)" stroke="#7a4a00" stroke-width="3"/><circle cx="8" cy="26" r="5" fill="#e53935"/><circle cx="50" cy="15" r="5.5" fill="#1e88e5"/><circle cx="92" cy="26" r="5" fill="#43a047"/><circle cx="30" cy="82.5" r="3" fill="#e53935"/><circle cx="50" cy="82.5" r="3" fill="#1e88e5"/><circle cx="70" cy="82.5" r="3" fill="#43a047"/></svg></button><div class="mut" style="margin-top:18px" id="cp"></div><div id="cw" style="width:100%;max-width:340px;margin-top:14px"></div></div>':view();if(t=='home'){$('coin').onpointerdown=tap;$('gear').onpointerdown=()=>go('set');$('mapb').onpointerdown=openMap}if(t=='set')msg='';nav();if(t=='rank'){msg='';push().then(loadLB)}}
 function nav(){$('nav').innerHTML=[['home','🏠','خانه'],['workers','👷','کارگران'],['props','🏢','املاک'],['comps','🏭','شرکت‌ها'],['market','🛒','بازار'],['boost','⚡','Boost'],['rank','🏆','رتبه']].map(x=>`<button class="${tab==x[0]?'on':''}" onpointerdown="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join('')}
-function tap(e){const v=click();earn(v);if(S.sd)beep();S.ms.k++;if(S.ms.k%5==0)xp(1);const s=document.createElement('span');s.className='fl';s.textContent='+'+f(v);s.style.left=(e.clientX-15)+'px';s.style.top=(e.clientY-40)+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),900);upd()}
-function upd(){lgApply();$('hc').textContent=f(S.c);$('hi').textContent=f(inc())+' در ثانیه';$('ha').textContent=f(assets());$('hl').textContent='سطح '+f(S.lv)+' — '+title()+' '+md(S.pr);$('xpf').style.width=(S.lv>=50?100:S.xp/need()*100)+'%';const w=$('cw');if(w){const b=(n,u,c)=>`<div style="margin-top:8px"><div class="row mut"><span>${n}</span><span>${c?f(u)+' / '+f(c):'—'}</span></div><div class="bar"><div style="height:100%;background:linear-gradient(90deg,#ffb400,#ffe27a);width:${c?Math.min(100,u/c*100):0}%"></div></div></div>`;w.innerHTML=b('🔐 گاو صندوق',S.c,capC())+b('🥇 انبار طلا (گرم)',S.g,capG())+b('🛢 انبار نفت (بشکه)',S.o,capO())}const c=$('cp');if(c)c.textContent='هر لمس: '+f(click())+' شاهی'}
+function tap(e){sfx('coin');const v=click();earn(v);S.ms.k++;if(S.ms.k%5==0)xp(1);const s=document.createElement('span');s.className='fl';s.textContent='+'+f(v);s.style.left=(e.clientX-15)+'px';s.style.top=(e.clientY-40)+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),900);upd()}
+function upd(){lgApply();$('hc').textContent=f(S.c);$('hi').textContent=f(inc())+' در ثانیه';$('ha').textContent=f(assets());$('hl').textContent='سطح '+f(S.lv)+' — '+title()+' '+md(S.pr);$('xpf').style.width=(S.lv>=50?100:S.xp/need()*100)+'%';const w=$('cw');if(w){const VB=()=>`<button class="b" style="width:100%;margin-top:6px;padding:6px" ${S.c<costV()?'disabled':''} onpointerdown="act('wh',0)">🔐 ${S.vl?'ارتقا':'خرید'} ${f(costV())}</button>`,b=(n,u,c,x)=>`<div style="margin-top:8px"><div class="row mut"><span>${n}</span><span>${c?f(u)+' / '+f(c):'—'}</span></div><div class="bar"><div style="height:100%;background:linear-gradient(90deg,#ffb400,#ffe27a);width:${c?Math.min(100,u/c*100):0}%"></div></div>${x||''}</div>`;w.innerHTML=b('🔐 گاو صندوق',S.c,capC(),VB())+b('🥇 انبار طلا (گرم)',S.g,capG())+b('🛢 انبار نفت (بشکه)',S.o,capO())}const c=$('cp');if(c)c.textContent='هر لمس: '+f(click())+' شاهی'}
 function tick(){if(S.ms.d!=day())S.ms={d:day(),k:0,h:0,p:0,e:0,done:[]};const g=inc();earn(g);if(g>0)xp(1);
  if(!(S.ev&&Date.now()<S.ev.end)&&Math.random()<.012){const e=EV[Math.floor(Math.random()*EV.length)];S.ev={t:e[0],k:e[1],m:e[2],end:Date.now()+25000};toast(e[0])}
  const bi=k=>S.ev&&S.ev.k==k&&Date.now()<S.ev.end?S.ev.m:0;
@@ -335,7 +607,7 @@ function tick(){if(S.ms.d!=day())S.ms={d:day(),k:0,h:0,p:0,e:0,done:[]};const g=
  S.gh.push(S.gp);S.oh.push(S.op);if(S.gh.length>40)S.gh.shift();if(S.oh.length>40)S.oh.shift();
  S.sp=S.sp.map((p,i)=>{const b=[100,500,2000][i];return Math.min(b*4,Math.max(b/3,p*(1+(Math.random()-.5)*.08+bi('s'))))});
  S.st.forEach((n,i)=>{S.c+=n*S.sp[i]*.0008});
- cl();upd();render()}
+ cl();upd();render();if(mo)msheet()}
 function offline(){const dt=Math.min((Date.now()-S.t)/1000,28800),g=inc()*dt;if(dt>60&&g>0){earn(g);setTimeout(()=>toast('درآمد آفلاین: '+f(g)+' شاهی 💤'),400)}}
 offline();chk();
 // ===== حساب کاربری و لیدربورد (Supabase) =====
@@ -354,7 +626,7 @@ async function api(path,o={}){const h={apikey:SK,'Content-Type':'application/jso
 async function pull(){const r=await api('/rest/v1/players?id=eq.'+A.id+'&select=name,save');
  if(r&&r[0]){A.name=r[0].name;saveA();const sv=r[0].save;if(sv&&sv.lv!==undefined){const L=S;S=ld(sv);const ca=assets(),cp=S.pr;S=L;if(cp>S.pr||(cp==S.pr&&ca>assets())){S=ld(sv);offline()}}}chk()}
 async function push(k){if(!A||!A.id)return;try{await api('/rest/v1/players?on_conflict=id',{m:'POST',h:{Prefer:'resolution=merge-duplicates,return=minimal'},b:{id:A.id,name:A.name||'بازیکن',assets:Math.floor(assets()),save:S,updated_at:new Date().toISOString()},k})}catch(e){}}
-async function loadLB(){try{LB=await api('/rest/v1/players?select=name,assets,pr:save->pr,av:save->av&order=assets.desc&limit=50')||[]}catch(e){msg=tr(e.message)}rr()}
+async function loadLB(){try{LB=await api('/rest/v1/players?select=name,assets,pr:save->pr,av:save->av,cn:save->cn&order=assets.desc&limit=50')||[]}catch(e){msg=tr(e.message)}rr()}
 function rr(){if(tab!='rank')return;const a=document.activeElement;if(a&&a.tagName=='INPUT')return;$('view').innerHTML=rankView()}
 async function doAuth(mode){const e=$('em').value.trim(),p=$('pw').value,n=($('nm').value||'').trim().slice(0,16);
  if(!e||p.length<6){msg='ایمیل و رمز (حداقل ۶ حرف) را وارد کن';return fr()}
@@ -369,12 +641,12 @@ function fr(){$('view').innerHTML=tab=='set'?setView():rankView()}
 function logout(){A=null;saveA();msg='';fr()}
 function accH(){let h='';
  if(!A)h+=`<div class="card" style="display:block"><div class="mut" style="margin-bottom:10px">برای ذخیره پیشرفت روی حساب و حضور در لیدربورد وارد شو.</div><input id="nm" placeholder="نام نمایشی (فقط برای ثبت‌نام)" maxlength="16"><input id="em" type="email" placeholder="ایمیل" dir="ltr"><input id="pw" type="password" placeholder="رمز (حداقل ۶ حرف)" dir="ltr"><div class="btns" style="justify-content:stretch"><button class="b" onclick="doAuth('in')">ورود</button><button class="b r" onclick="doAuth('up')">ثبت‌نام</button></div></div>`;
- else h+=card(AV[S.av|0]+' '+esc(A.name||'بازیکن')+' '+md(S.pr),'دارایی شما: '+f(assets())+' — پیشرفت روی حساب ذخیره می‌شود','<button class="b r" onclick="logout()">خروج</button>');
+ else h+=card(AV[S.av|0]+' '+esc(A.name||'بازیکن')+' '+fg(S.cn)+' '+md(S.pr),'دارایی شما: '+f(assets())+' — پیشرفت روی حساب ذخیره می‌شود','<button class="b r" onclick="logout()">خروج</button>');
  return h}
 function rankView(){let h='<h3>🏆 رتبه‌بندی</h3>';
  if(msg)h+=`<div style="color:var(--gold);margin:8px 4px;font-size:13px">${msg}</div>`;
  h+='<h3>۵۰ نفر برتر (بر اساس دارایی)</h3>';
- h+=LB.length?LB.map((p,i)=>card((i<3?['🥇','🥈','🥉'][i]:f(i+1)+'.')+' '+AV[+p.av||0]+' '+esc(p.name)+' '+md(+p.pr||0),'',`<b style="color:var(--gold)">${f(p.assets)}</b>`)).join(''):'<div class="mut">هنوز کسی در لیست نیست.</div>';
+ h+=LB.length?LB.map((p,i)=>card((i<3?['🥇','🥈','🥉'][i]:f(i+1)+'.')+' '+AV[+p.av||0]+' '+esc(p.name)+' '+fg(p.cn)+' '+md(+p.pr||0),'',`<b style="color:var(--gold)">${f(p.assets)}</b>`)).join(''):'<div class="mut">هنوز کسی در لیست نیست.</div>';
  return h+'<div style="text-align:center"><button class="b r" onclick="push().then(loadLB)">🔄 بروزرسانی</button></div>'}
 setInterval(()=>push(),30000);
 addEventListener('pagehide',()=>push(1));
