@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1535"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <title>بازارشاه</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1535;--card:#142250;--gold:#ffd24a;--tx:#fff;--mut:#9fb0de;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -653,4 +654,5 @@ addEventListener('pagehide',()=>push(1));
 if(A)pull().then(()=>{upd();render()}).catch(()=>{});
 new MutationObserver(()=>{if(S.lg=='en')xl(document.body)}).observe(document.body,{childList:true,subtree:true,characterData:true});go('home');upd();setInterval(tick,1000);setInterval(save,5000);
 document.addEventListener('visibilitychange',save);addEventListener('pagehide',save);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script></body></html>
