@@ -901,7 +901,7 @@ function rectPos(L,s){const w=L.x1-L.x0,h=L.z1-L.z0,P=2*(w+h);s=((s%P)+P)%P;if(s
 function mkLoop(seed,lane){let a=Math.floor(rnd(seed)*6),b=Math.min(7,a+2+Math.floor(rnd(seed+1)*(6-a))),c=Math.floor(rnd(seed+2)*6),d=Math.min(7,c+2+Math.floor(rnd(seed+3)*(6-c)));return{x0:XS[a]+lane,x1:XS[b]-lane,z0:XS[c]+lane,z1:XS[d]-lane,P:2*((XS[b]-XS[a]-2*lane)+(XS[d]-XS[c]-2*lane))}}
 // --- باز و بسته ---
 function openCity(){if($('cy'))return;if(!t3load()){toast(L('سه‌بعدی روی این دستگاه ممکن نیست','3D is not available on this device'));return}
- const d=document.createElement('div');d.id='cy';d.innerHTML=`<div class="mt"><b style="color:var(--gold)">🏙 ${L('شهر من','My city')}</b><span class="mut" id="cyi"></span><span><button class="b" style="padding:6px 12px;margin-inline-end:6px" onpointerdown="cityTod()" id="cyt">🕒</button><button class="b r" style="padding:6px 14px" onpointerdown="closeCity()">✕</button></span></div><div id="cv"></div><div id="cx" class="mut"></div>`;document.body.appendChild(d);
+ const d=document.createElement('div');d.id='cy';d.innerHTML=`<div class="mt"><b style="color:var(--gold)">🏙 ${L('شهر من','My city')+' v3'}</b><span class="mut" id="cyi"></span><span><button class="b" style="padding:6px 12px;margin-inline-end:6px" onpointerdown="cityTod()" id="cyt">🕒</button><button class="b r" style="padding:6px 14px" onpointerdown="closeCity()">✕</button></span></div><div id="cv"></div><div id="cx" class="mut"></div>`;document.body.appendChild(d);
  try{history.pushState({o:1},'')}catch(e){}try{cityInit()}catch(e){console.error(e);closeCity();toast(L('سه‌بعدی روی این دستگاه ممکن نیست','3D is not available on this device'))}}
 function closeCity(){if(CY){cancelAnimationFrame(CY.raf);try{CY.R.dispose();CY.R.forceContextLoss&&CY.R.forceContextLoss()}catch(e){}CY=null}const d=$('cy');if(d)d.remove()}
 const MOB=/Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -1083,7 +1083,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)return;cons
 addEventListener('popstate',()=>{if($('cy'))closeCity();else if($('mp'))closeMap()});
 new MutationObserver(()=>{if(S.lg=='en')xl(document.body)}).observe(document.body,{childList:true,subtree:true,characterData:true});go('home');upd();setInterval(tick,1000);setInterval(save,5000);offline();chk();
 document.addEventListener('visibilitychange',save);addEventListener('pagehide',save);
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if('serviceWorker' in navigator)addEventListener('load',()=>{navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister())).catch(()=>{});if(window.caches)caches.keys().then(k=>k.forEach(n=>caches.delete(n))).catch(()=>{})});
 </script><script id="t3src" type="text/plain">/**
  * @license
  * Copyright 2010-2021 Three.js Authors
